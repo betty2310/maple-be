@@ -15,7 +15,7 @@ public class SpiceService : ISpiceService
         return nestList;
     }
 
-    public string Run(NetlistRequest netlistRequest)
+    public List<double> Run(NetlistRequest netlistRequest)
     {
         Console.WriteLine(netlistRequest.ExportNode);
         
@@ -30,15 +30,15 @@ public class SpiceService : ISpiceService
         var simulation = spiceSharpModel.Simulations.Single();
         var export = spiceSharpModel.Exports.Find(e => e.Name == netlistRequest.ExportNode);
         
-        var outputBuilder = new StringBuilder();
+        var outputList = new List<double>();
         simulation.ExportSimulationData += (sender, args) =>
         {
-            var output = export.Extract().ToString();
-            outputBuilder.AppendLine(output);
+            var output = Convert.ToDouble(export.Extract());
+            outputList.Add(output);
         };
 
         simulation.Run(spiceSharpModel.Circuit);
 
-        return outputBuilder.ToString();
+        return outputList;
     }
 }

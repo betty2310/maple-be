@@ -15,8 +15,8 @@ namespace maple_backend
            var simulationOuput =  spiceService.Run(netlist);
            var response = new SimulationResponse
            {
-               Output = simulationOuput,
-               Node = netlist.ExportNode
+               Node = netlist.ExportNode,
+               Output = simulationOuput
            };
            return Ok(response);
 

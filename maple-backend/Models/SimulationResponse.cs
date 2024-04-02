@@ -2,6 +2,6 @@ namespace maple_backend.Models;
 
 public class SimulationResponse
 {
-    public string Output { get; set; }
-    public string Node { get; set; }
+    public required List<double> Output { get; set; }
+    public required string Node { get; set; }
 }

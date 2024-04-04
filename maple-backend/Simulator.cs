@@ -19,7 +19,6 @@ namespace maple_backend
                Output = simulationOuput
            };
            return Ok(response);
-
         }
     }
 }

@@ -12,11 +12,11 @@ namespace maple_backend
         [HttpPost]
         public IActionResult Post([FromBody] NetlistRequest netlist)
         {
-           var simulationOuput =  spiceService.Run(netlist);
+           var simulationOutput =  spiceService.Run(netlist);
            var response = new SimulationResponse
            {
                Node = netlist.ExportNode,
-               Output = simulationOuput
+               Output = simulationOutput
            };
            return Ok(response);
         }

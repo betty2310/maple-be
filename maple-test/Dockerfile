@@ -5,7 +5,7 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["maple-test/maple-test.csproj", "maple-test/"]
+COPY ["maple-test.csproj", "maple-test/"]
 RUN dotnet restore "maple-test/maple-test.csproj"
 COPY . .
 WORKDIR "/src/maple-test"

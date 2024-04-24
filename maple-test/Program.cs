@@ -15,6 +15,8 @@ public abstract class Roles
 
 public class Program
 {
+    private const string V = "2";
+
     public static void JsonSerialization()
     {
         var voltage = new VoltageSource("V1", "in", "0", 1.0);
@@ -45,24 +47,26 @@ public class Program
 
     public static void Main()
     {
-        Console.WriteLine(Roles.Administrator);
+        //Console.WriteLine(Roles.Administrator);
         SpiceSharpParse();
     }
 
     public static void SpiceSharpParse()
     {
         string netlistString = string.Join(Environment.NewLine,
-        "V1 in 0 1.0",
-        "R1 in out 10k",
-        "R2 out 0 20k",
-        ".DC V1 -1 1 0.2",
-        ".SAVE v(out)",
-        ".END");
+            "test",
+        "V0 1 0 1",
+        "R1 2 1 1000",
+        "R3 0 2 1000",
+        //".DC V0 -1 1 10e-3",
+        //".SAVE v(2)",
+        ".END"
+        );
 
         //var netlistText = string.Join(Environment.NewLine,
         //               "Diode circuit",
-        //               "D1 OUT 0 1N914",
-        //               "V1 OUT 0 0",
+        //               "D1 1 0 1N914",
+        //               "V1 1 0 0",
         //               ".model 1N914 D(Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9)",
         //               ".DC V1 -1 1 10e-3",
         //               ".SAVE i(D1)",
@@ -73,13 +77,13 @@ public class Program
                "R1 in out 10k",
                "C1 out 0 1u",
                ".AC dec 5 10m 1k",
-               ".SAVE i(C1)",
+               ".SAVE v(out)",
                ".END"
         );
 
         // Parse the SPICE netlist
         var parser = new SpiceNetlistParser();
-        var parseResult = parser.ParseNetlist(netlistText);
+        var parseResult = parser.ParseNetlist(netlistString);
         var spiceNetlist = parseResult.FinalModel;
 
         // Create a SpiceSharp reader and read the parsed model
@@ -88,19 +92,28 @@ public class Program
 
         // Get the circuit and simulation objects
         var circuit = spiceSharpModel.Circuit;
+
+        var dc = new DC("DC 1", "V0", -1.0, 1.0, 0.2);
+        var tran = new Transient("Tran 1", 1e-3, 0.1);
+
         var simulation = spiceSharpModel.Simulations.Single();
 
         // Output variable
         var outputList = new List<double>();
 
+
         // Catch exported data
-        var export = spiceSharpModel.Exports.Find(e => e.Name == "i(C1)");
-        simulation.ExportSimulationData += (sender, args) =>
+        var export = spiceSharpModel.Exports.Find(e => e.Name == "i(R2)");
+
+        dc.ExportSimulationData += (sender, args) =>
         {
-            Console.WriteLine(export?.Extract());
+            Console.WriteLine($"V: {args.GetVoltage(V)}");
+            var current = args.GetSweepValues();
+            Console.WriteLine($"Current: {current[0]}");
+
         };
 
         // Run the simulation
-        simulation.Run(circuit);
+        dc.Run(circuit);
     }
 }

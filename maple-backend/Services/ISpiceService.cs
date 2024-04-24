@@ -5,5 +5,5 @@ namespace maple_backend.Services;
 
 public interface ISpiceService
 {
-    List<double> Run(NetlistRequest netlistRequest);
+    SimulationResponse Run(NetlistRequest netlistRequest);
 }

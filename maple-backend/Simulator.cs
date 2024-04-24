@@ -1,5 +1,6 @@
 using maple_backend.Models;
 using maple_backend.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace maple_backend
@@ -12,12 +13,7 @@ namespace maple_backend
         [HttpPost]
         public IActionResult Post([FromBody] NetlistRequest netlist)
         {
-           var simulationOutput =  spiceService.Run(netlist);
-           var response = new SimulationResponse
-           {
-               Node = netlist.ExportNode,
-               Output = simulationOutput
-           };
+           var response =  spiceService.Run(netlist);
            return Ok(response);
         }
     }

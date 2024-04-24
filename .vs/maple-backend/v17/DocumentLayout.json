@@ -3,8 +3,36 @@
   "WorkspaceRootPath": "C:\\Users\\betty\\Desktop\\maple\\maple-be\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{DF9FD313-F863-453D-94B5-9DF8253D4AF7}|maple-backend\\maple-backend.csproj|c:\\users\\betty\\desktop\\maple\\maple-be\\maple-backend\\services\\spiceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DF9FD313-F863-453D-94B5-9DF8253D4AF7}|maple-backend\\maple-backend.csproj|solutionrelative:maple-backend\\services\\spiceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DF9FD313-F863-453D-94B5-9DF8253D4AF7}|maple-backend\\maple-backend.csproj|c:\\users\\betty\\desktop\\maple\\maple-be\\maple-backend\\models\\simulationresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DF9FD313-F863-453D-94B5-9DF8253D4AF7}|maple-backend\\maple-backend.csproj|solutionrelative:maple-backend\\models\\simulationresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DF9FD313-F863-453D-94B5-9DF8253D4AF7}|maple-backend\\maple-backend.csproj|c:\\users\\betty\\desktop\\maple\\maple-be\\maple-backend\\models\\netlistrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DF9FD313-F863-453D-94B5-9DF8253D4AF7}|maple-backend\\maple-backend.csproj|solutionrelative:maple-backend\\models\\netlistrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{CBF14B9A-981A-4AF3-B1DB-252A6592C814}|maple-test\\maple-test.csproj|c:\\users\\betty\\desktop\\maple\\maple-be\\maple-test\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CBF14B9A-981A-4AF3-B1DB-252A6592C814}|maple-test\\maple-test.csproj|solutionrelative:maple-test\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DF9FD313-F863-453D-94B5-9DF8253D4AF7}|maple-backend\\maple-backend.csproj|c:\\users\\betty\\desktop\\maple\\maple-be\\maple-backend\\simulator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DF9FD313-F863-453D-94B5-9DF8253D4AF7}|maple-backend\\maple-backend.csproj|solutionrelative:maple-backend\\simulator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DF9FD313-F863-453D-94B5-9DF8253D4AF7}|maple-backend\\maple-backend.csproj|c:\\users\\betty\\desktop\\maple\\maple-be\\maple-backend\\services\\ispiceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DF9FD313-F863-453D-94B5-9DF8253D4AF7}|maple-backend\\maple-backend.csproj|solutionrelative:maple-backend\\services\\ispiceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DF9FD313-F863-453D-94B5-9DF8253D4AF7}|maple-backend\\maple-backend.csproj|c:\\users\\betty\\desktop\\maple\\maple-be\\maple-backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DF9FD313-F863-453D-94B5-9DF8253D4AF7}|maple-backend\\maple-backend.csproj|solutionrelative:maple-backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DF9FD313-F863-453D-94B5-9DF8253D4AF7}|maple-backend\\maple-backend.csproj|c:\\users\\betty\\desktop\\maple\\maple-be\\maple-backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DF9FD313-F863-453D-94B5-9DF8253D4AF7}|maple-backend\\maple-backend.csproj|solutionrelative:maple-backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,19 +42,110 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SimulationResponse.cs",
+              "DocumentMoniker": "C:\\Users\\betty\\Desktop\\maple\\maple-be\\maple-backend\\Models\\SimulationResponse.cs",
+              "RelativeDocumentMoniker": "maple-backend\\Models\\SimulationResponse.cs",
+              "ToolTip": "C:\\Users\\betty\\Desktop\\maple\\maple-be\\maple-backend\\Models\\SimulationResponse.cs",
+              "RelativeToolTip": "maple-backend\\Models\\SimulationResponse.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-24T14:27:44.034Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "NetlistRequest.cs",
+              "DocumentMoniker": "C:\\Users\\betty\\Desktop\\maple\\maple-be\\maple-backend\\Models\\NetlistRequest.cs",
+              "RelativeDocumentMoniker": "maple-backend\\Models\\NetlistRequest.cs",
+              "ToolTip": "C:\\Users\\betty\\Desktop\\maple\\maple-be\\maple-backend\\Models\\NetlistRequest.cs",
+              "RelativeToolTip": "maple-backend\\Models\\NetlistRequest.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAHAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-24T14:26:33.982Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Simulator.cs",
+              "DocumentMoniker": "C:\\Users\\betty\\Desktop\\maple\\maple-be\\maple-backend\\Simulator.cs",
+              "RelativeDocumentMoniker": "maple-backend\\Simulator.cs",
+              "ToolTip": "C:\\Users\\betty\\Desktop\\maple\\maple-be\\maple-backend\\Simulator.cs",
+              "RelativeToolTip": "maple-backend\\Simulator.cs",
+              "ViewState": "AQIAAAIAAAAAAAAAAAA2wAgAAAATAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-23T07:45:52.047Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "SpiceService.cs",
+              "DocumentMoniker": "C:\\Users\\betty\\Desktop\\maple\\maple-be\\maple-backend\\Services\\SpiceService.cs",
+              "RelativeDocumentMoniker": "maple-backend\\Services\\SpiceService.cs",
+              "ToolTip": "C:\\Users\\betty\\Desktop\\maple\\maple-be\\maple-backend\\Services\\SpiceService.cs",
+              "RelativeToolTip": "maple-backend\\Services\\SpiceService.cs",
+              "ViewState": "AQIAADYAAAAAAAAAAAAywD8AAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-23T07:45:45.575Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\betty\\Desktop\\maple\\maple-be\\maple-test\\Program.cs",
               "RelativeDocumentMoniker": "maple-test\\Program.cs",
               "ToolTip": "C:\\Users\\betty\\Desktop\\maple\\maple-be\\maple-test\\Program.cs",
               "RelativeToolTip": "maple-test\\Program.cs",
-              "ViewState": "AQIAACgAAAAAAAAAAAAuwC4AAAAFAAAA",
+              "ViewState": "AQIAAGYAAAAAAAAAAAAIwHAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-15T12:59:34.604Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\betty\\Desktop\\maple\\maple-be\\maple-backend\\Program.cs",
+              "RelativeDocumentMoniker": "maple-backend\\Program.cs",
+              "ToolTip": "C:\\Users\\betty\\Desktop\\maple\\maple-be\\maple-backend\\Program.cs",
+              "RelativeToolTip": "maple-backend\\Program.cs",
+              "ViewState": "AQIAAA4AAAAAAAAAAAAkwBgAAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-23T07:28:19.73Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ISpiceService.cs",
+              "DocumentMoniker": "C:\\Users\\betty\\Desktop\\maple\\maple-be\\maple-backend\\Services\\ISpiceService.cs",
+              "RelativeDocumentMoniker": "maple-backend\\Services\\ISpiceService.cs",
+              "ToolTip": "C:\\Users\\betty\\Desktop\\maple\\maple-be\\maple-backend\\Services\\ISpiceService.cs",
+              "RelativeToolTip": "maple-backend\\Services\\ISpiceService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-24T14:27:58.157Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\betty\\Desktop\\maple\\maple-be\\maple-backend\\appsettings.json",
+              "RelativeDocumentMoniker": "maple-backend\\appsettings.json",
+              "ToolTip": "C:\\Users\\betty\\Desktop\\maple\\maple-be\\maple-backend\\appsettings.json",
+              "RelativeToolTip": "maple-backend\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-04-24T14:27:56.62Z",
               "EditorCaption": ""
             }
           ]

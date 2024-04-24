@@ -2,6 +2,7 @@ using maple_backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors();
 builder.Services.AddScoped<ISpiceService, SpiceService>();
 
 builder.Services.AddControllers();
@@ -12,6 +13,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+
+app.UseCors(builder => builder
+       .AllowAnyHeader()
+       .AllowAnyMethod()
+       .AllowAnyOrigin()
+    );
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

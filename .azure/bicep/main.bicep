@@ -72,17 +72,17 @@ var environmentConfigurationMap = {
 
 // Define the names for resources.
 var environmentAbbreviation = environmentConfigurationMap[environmentName].environmentAbbreviation
-var keyVaultName = 'kv-${projectName}-${environmentAbbreviation}'
+// var keyVaultName = 'kv-${projectName}-${environmentAbbreviation}'
 var appServiceAppName = 'as-${projectName}-${resourceNameSuffix}-${environmentAbbreviation}'
 var appServicePlanName = 'plan-${projectName}-${environmentAbbreviation}'
-var logAnalyticsWorkspaceName = 'log-${projectName}-${environmentAbbreviation}'
-var applicationInsightsName = 'appi-${projectName}-${environmentAbbreviation}'
-var sqlServerName = 'sql-${projectName}-${resourceNameSuffix}-${environmentAbbreviation}'
-var sqlDatabaseName = '${projectName}-${environmentAbbreviation}'
+// var logAnalyticsWorkspaceName = 'log-${projectName}-${environmentAbbreviation}'
+// var applicationInsightsName = 'appi-${projectName}-${environmentAbbreviation}'
+// var sqlServerName = 'sql-${projectName}-${resourceNameSuffix}-${environmentAbbreviation}'
+// var sqlDatabaseName = '${projectName}-${environmentAbbreviation}'
 
 // Define the SKUs for each component based on the environment type.
 var appServicePlanSku = environmentConfigurationMap[environmentName].appServicePlan.sku
-var sqlDatabaseSku = environmentConfigurationMap[environmentName].sqlDatabase.sku
+// var sqlDatabaseSku = environmentConfigurationMap[environmentName].sqlDatabase.sku
 
 // resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-10-01' = {
 //   name: logAnalyticsWorkspaceName

@@ -27,41 +27,55 @@ public class Program
     public static void SpiceSharp()
     {
         var ckt = new Circuit(
-            new VoltageSource("V1", "in", "0", 1.0),
-            new Resistor("R1", "in", "out", 1.0e4),
-            new Resistor("R2", "out", "0", 2.0e4)
+            new VoltageSource("V1", "r1", "0", 1.0),
+            new Resistor("R1", "r2", "r1", 1.0e4),
+            new Resistor("R2", "0", "r2", 2.0e4)
         );
 
         var dc = new DC("DC 1", "V1", -1.0, 1.0, 0.2);
 
+        // Create the simulation
+        var tran = new Transient("Tran 1", 1e-3, 0.1);
+
+        // Make the exports
+        var inputExport = new RealVoltageExport(tran, "R1");
+        var outputExport = new RealVoltageExport(tran, "R2");
+
         // Catch exported data
         var sb = new StringBuilder();
-        dc.ExportSimulationData += (sender, args) =>
+        tran.ExportSimulationData += (sender, args) =>
         {
-            var input = args.GetVoltage("in");
-            var output = args.GetVoltage("out");
-            sb.AppendLine($"V(in)={input} V(out)={output}");
+            // var input = args.GetVoltage("R1");
+            // var output = args.GetVoltage("R2");
+            // sb.AppendLine($"V(in)={input} V(out)={output}");
+            // Console.WriteLine($"V(in)={input} V(out)={output}");
+            var input = inputExport.Value;
+            var output = outputExport.Value;
+            Console.WriteLine($"V(in)={input} V(out)={output}");
         };
-        dc.Run(ckt);
+        tran.Run(ckt);
     }
 
     public static void Main()
     {
         //Console.WriteLine(Roles.Administrator);
         SpiceSharpParse();
+        SpiceSharp();
     }
 
     public static void SpiceSharpParse()
     {
         string netlistString = string.Join(Environment.NewLine,
             "test",
-        "V0 1 0 1",
-        "R1 2 1 1000",
-        "R3 0 2 1000",
-        //".DC V0 -1 1 10e-3",
-        //".SAVE v(2)",
-        ".END"
+            "V0 1 0 1",
+            "R1 2 1 1000",
+            "R3 0 2 1000",
+            //".DC V0 -1 1 10e-3",
+            //".SAVE v(2)",
+            ".END"
         );
+        
+        Console.WriteLine(netlistString);
 
         //var netlistText = string.Join(Environment.NewLine,
         //               "Diode circuit",
@@ -72,13 +86,13 @@ public class Program
         //               ".SAVE i(D1)",
         //               ".END");
         var netlistText = string.Join(Environment.NewLine,
-               "Diode circuit",
-               "V1 in 0 0 AC 1",
-               "R1 in out 10k",
-               "C1 out 0 1u",
-               ".AC dec 5 10m 1k",
-               ".SAVE v(out)",
-               ".END"
+            "Diode circuit",
+            "V1 in 0 0 AC 1",
+            "R1 in out 10k",
+            "C1 out 0 1u",
+            ".AC dec 5 10m 1k",
+            ".SAVE v(out)",
+            ".END"
         );
 
         // Parse the SPICE netlist
@@ -110,7 +124,6 @@ public class Program
             Console.WriteLine($"V: {args.GetVoltage(V)}");
             var current = args.GetSweepValues();
             Console.WriteLine($"Current: {current[0]}");
-
         };
 
         // Run the simulation

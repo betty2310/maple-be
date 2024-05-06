@@ -1,12 +1,13 @@
 using System.Text;
 using maple_backend.Models;
+using maple_backend.Utils;
 using SpiceSharp.Simulations;
 using SpiceSharpParser;
 using SpiceSharpParser.Models.Netlist.Spice;
 
 namespace maple_backend.Services;
 
-public class SpiceService : ISpiceService
+public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
 {
     public SpiceNetlist Parser(string netlistText)
     {
@@ -18,13 +19,15 @@ public class SpiceService : ISpiceService
 
     public SimulationResponse Run(NetlistRequest netlistRequest)
     {
-        var exportNode = netlistRequest.ExportNode;
-        int startIndex = exportNode.IndexOf('(') + 1;
-        int length = exportNode.IndexOf(')') - startIndex;
-        string valueInsideParentheses = exportNode.Substring(startIndex, length);
+        var netlistStr = netlistRequest.Netlist.Replace("\\n", "\n");
+        LoggingUtil.LogMessage(logger, LogLevel.Information, netlistStr);
+
+        var exportNode = netlistRequest.ExportNodes[0];
+
+        LoggingUtil.LogMessage(logger, LogLevel.Information, exportNode.node);
 
         // Parsing part
-        var netlist = Parser(netlistRequest.Netlist);
+        var netlist = Parser(netlistStr);
 
         // Translating netlist model to SpiceSharp
         var reader = new SpiceSharpReader();
@@ -34,8 +37,6 @@ public class SpiceService : ISpiceService
         var voltageSource = circuit.ToList().First(circuit => circuit.Name.Contains('V'));
 
         // Simulation using SpiceSharp
-        //var simulation = spiceSharpModel.Simulations.Single();
-        var export = spiceSharpModel.Exports.Find(e => e.Name == netlistRequest.ExportNode);
         var start = -1.0;
         var stop = 1.0;
         var step = 0.2;
@@ -54,7 +55,7 @@ public class SpiceService : ISpiceService
                 }
                 dc.ExportSimulationData += (sender, args) =>
                 {
-                    var output = args.GetVoltage(valueInsideParentheses);
+                    var output = args.GetVoltage(exportNode.node);
                     outputList.Add(output);
                 };
 
@@ -71,14 +72,12 @@ public class SpiceService : ISpiceService
                 }
                 tran.ExportSimulationData += (sender, args) =>
                 {
-                    var output = args.GetVoltage(valueInsideParentheses);
+                    var output = args.GetVoltage(exportNode.node);
                     outputList.Add(output);
                 };
                 tran.Run(circuit);
                 break;
             case Mode.AC:
-                break;
-            case Mode.Interactive:
                 break;
             default:
                 break;

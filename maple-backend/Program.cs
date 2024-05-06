@@ -7,13 +7,14 @@ builder.Services.AddScoped<ISpiceService, SpiceService>();
 
 builder.Services.AddControllers();
 
+builder.Logging.ClearProviders().AddConsole();
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
 
 app.UseCors(builder => builder
        .AllowAnyHeader()

@@ -3,8 +3,8 @@ namespace maple_backend.Models;
 public enum Mode
 {
     Transient,
-    DC,
-    AC,
+    DCSweep,
+    ACSweep,
 }
 
 public class NetlistRequest

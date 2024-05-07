@@ -1,6 +1,5 @@
 using maple_backend.Models;
 using maple_backend.Services;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace maple_backend

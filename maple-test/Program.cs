@@ -65,17 +65,24 @@ public class Program
 
     public static void SpiceSharpParse()
     {
-        string netlistString = string.Join(Environment.NewLine,
+        // string netlistString = string.Join(Environment.NewLine,
+        //     "test",
+        //     "V0 1 0 1",
+        //     "R1 2 1 1000",
+        //     "R3 0 2 1000",
+        //     //".DC V0 -1 1 10e-3",
+        //     //".SAVE v(2)",
+        //     ".END"
+        // );
+        
+        var netlistString = string.Join(Environment.NewLine,
             "test",
-            "V0 1 0 1",
-            "R1 2 1 1000",
-            "R3 0 2 1000",
-            //".DC V0 -1 1 10e-3",
-            //".SAVE v(2)",
+            "VS	1 0	AC 1 SIN(0 1 2KHZ 0 0 0)",
+            "R1	1 2 1000",
+            "C1 2 0	0.032UF",
             ".END"
         );
         
-        Console.WriteLine(netlistString);
 
         //var netlistText = string.Join(Environment.NewLine,
         //               "Diode circuit",

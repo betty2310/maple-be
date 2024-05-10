@@ -75,7 +75,14 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
                     var output = args.GetVoltage(exportNode.node);
                     outputList.Add(output);
                 };
-                tran.Run(circuit);
+                try
+                {
+                    tran.Run(circuit);
+                }
+                catch (ValidationFailedException e)
+                {
+                    outputList.Add(0);
+                }
                 break;
             case Mode.ACSweep:
                 const double initial = 1e-2;

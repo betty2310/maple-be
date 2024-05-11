@@ -61,7 +61,8 @@ public class Program
         //Console.WriteLine(Roles.Administrator);
         // SpiceSharpParse();
         // SpiceSharp();
-        SpiceSharpParserDiode();
+        // SpiceSharpParserDiode();
+        new MachChinhLuuNuaChuky().Execute();
     }
 
     public static void SpiceSharpParse()
@@ -175,4 +176,5 @@ public class Program
         dc.ExportSimulationData += (sender, args) => Console.WriteLine(currentExport.Value);
         dc.Run(circuit);
     }
+    
 }

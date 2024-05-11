@@ -4,3 +4,19 @@ GET {{maple_backend_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+### Post mach chinh luu nua chu ky
+POST {{url}}/api/Simulator
+Content-Type: application/json
+
+{
+  "netlist": "Circuit Analysis\\nD1 2 1 1N914\\nR1 0 2 1000\\nV1 1 0 AC 1 SIN(0 1 50 0 0 0)\\n.END",
+  "title": "Circuit Analysis\n",
+  "exportNodes": [
+    {
+      "type": 0,
+      "node": "2"
+    }
+  ],
+  "mode": 0
+}
+

@@ -1,7 +1,10 @@
 using System.Text;
+using maple_backend.DiodeModels;
 using maple_backend.Models;
 using maple_backend.Utils;
+using SpiceSharp;
 using SpiceSharp.Components;
+using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using SpiceSharpParser;
 using SpiceSharpParser.Models.Netlist.Spice;
@@ -39,55 +42,43 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
         
         // we need to remote the diode node and add my custom
         var diodeNodes = circuit.ToList().Where(circuit => circuit.Name.Contains('D')).ToList();
-        foreach (var diodeNode in diodeNodes)
+        if (diodeNodes.Count > 0)
         {
-            if (diodeNode is not Component cp) continue;
-            var diode = new Diode(cp.Name, cp.Nodes[0], cp.Nodes[1], "1N914");
-            circuit.Remove(diodeNode);
-            circuit.Add(diode);
+            foreach (var diodeNode in diodeNodes)
+            {
+                if (diodeNode is not Component cp) continue;
+                var diode = new Diode(cp.Name, cp.Nodes[0], cp.Nodes[1], "1N914");
+                circuit.Remove(diodeNode);
+                circuit.Add(diode);
+                circuit.Add(new DiodeModel1N914().GetModel());
+            }
         }
         
 
-        var inputList = new List<double>();
-        var outputList = new List<double>();
+        var xAxisValues = new List<double>();
+        var yAxisvalues = new List<double>();
         var mode = netlistRequest.Mode;
 
         switch (mode)
         {
             case Mode.DCSweep:
-                // Simulation using SpiceSharp
-                const double start = -1.0;
-                const double stop = 1.0;
-                const double step = 0.2;
-                var dc = new DC("DC 1", voltageSource.Name, start, stop, step);
-
-                for (var i = start; i <= stop; i += step)
-                {
-                    inputList.Add(i);
-                }
-
-                dc.ExportSimulationData += (sender, args) =>
-                {
-                    var output = args.GetVoltage(exportNode.node);
-                    outputList.Add(output);
-                };
-
-                dc.Run(circuit);
+                SimulateDcSweep(voltageSource, xAxisValues, exportNode, yAxisvalues, circuit);
                 break;
             case Mode.Transient:
-                const double step_ = 1e-2;
-                var final = 1.0;
+                const double step_ = 1e-3;
+                var final = 0.1;
                 var tran = new Transient("Tran 1", step_, final);
 
                 for (var i = 0.0; i <= final; i += step_)
                 {
-                    inputList.Add(i);
+                    xAxisValues.Add(i);
                 }
 
+                var export = new RealVoltageExport(tran, exportNode.node);
                 tran.ExportSimulationData += (sender, args) =>
                 {
-                    var output = args.GetVoltage(exportNode.node);
-                    outputList.Add(output);
+                    var output = export.Value;
+                    yAxisvalues.Add(output);
                 };
                 try
                 {
@@ -95,7 +86,7 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
                 }
                 catch (ValidationFailedException e)
                 {
-                    outputList.Add(0);
+                    yAxisvalues.Add(0);
                 }
 
                 break;
@@ -104,13 +95,13 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
                 const double finalValue = 1.0e3;
                 const int pointsPerDecade = 5;
                 var ac = new AC("AC 1", new DecadeSweep(initial, finalValue, pointsPerDecade));
-                inputList = _generateFrequencyPoints(initial, finalValue, pointsPerDecade);
+                xAxisValues = _generateFrequencyPoints(initial, finalValue, pointsPerDecade);
                 var exportVoltage = new ComplexVoltageExport(ac, exportNode.node);
                 ac.ExportSimulationData += (sender, args) =>
                 {
                     var output = exportVoltage.Value;
                     var decibels = 10.0 * Math.Log10(output.Real * output.Real + output.Imaginary * output.Imaginary);
-                    outputList.Add(decibels);
+                    yAxisvalues.Add(decibels);
                 };
                 ac.Run(circuit);
                 break;
@@ -121,11 +112,34 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
 
         var response = new SimulationResponse
         {
-            Input = inputList,
-            Output = outputList
+            Input = xAxisValues,
+            Output = yAxisvalues
         };
 
         return response;
+    }
+
+    private static void SimulateDcSweep(IEntity voltageSource, List<double> inputList, ExportNode exportNode, List<double> outputList,
+        Circuit circuit)
+    {
+        // Simulation using SpiceSharp
+        const double start = -1.0;
+        const double stop = 1.0;
+        const double step = 0.2;
+        var dc = new DC("DC 1", voltageSource.Name, start, stop, step);
+
+        for (var i = start; i <= stop; i += step)
+        {
+            inputList.Add(i);
+        }
+
+        dc.ExportSimulationData += (sender, args) =>
+        {
+            var output = args.GetVoltage(exportNode.node);
+            outputList.Add(output);
+        };
+
+        dc.Run(circuit);
     }
 
     private static List<double> _generateFrequencyPoints(double initial, double final, int pointsPerDecade)

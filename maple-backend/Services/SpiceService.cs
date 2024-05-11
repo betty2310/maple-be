@@ -1,6 +1,7 @@
 using System.Text;
 using maple_backend.Models;
 using maple_backend.Utils;
+using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharpParser;
 using SpiceSharpParser.Models.Netlist.Spice;
@@ -35,24 +36,36 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
 
         var circuit = spiceSharpModel.Circuit;
         var voltageSource = circuit.ToList().First(circuit => circuit.Name.Contains('V'));
+        
+        // we need to remote the diode node and add my custom
+        var diodeNodes = circuit.ToList().Where(circuit => circuit.Name.Contains('D')).ToList();
+        foreach (var diodeNode in diodeNodes)
+        {
+            if (diodeNode is not Component cp) continue;
+            var diode = new Diode(cp.Name, cp.Nodes[0], cp.Nodes[1], "1N914");
+            circuit.Remove(diodeNode);
+            circuit.Add(diode);
+        }
+        
 
-        // Simulation using SpiceSharp
-        var start = -1.0;
-        var stop = 1.0;
-        var step = 0.2;
-        var dc = new DC("DC 1", voltageSource.Name, start, stop, step);
         var inputList = new List<double>();
         var outputList = new List<double>();
-
         var mode = netlistRequest.Mode;
 
         switch (mode)
         {
             case Mode.DCSweep:
+                // Simulation using SpiceSharp
+                const double start = -1.0;
+                const double stop = 1.0;
+                const double step = 0.2;
+                var dc = new DC("DC 1", voltageSource.Name, start, stop, step);
+
                 for (var i = start; i <= stop; i += step)
                 {
                     inputList.Add(i);
                 }
+
                 dc.ExportSimulationData += (sender, args) =>
                 {
                     var output = args.GetVoltage(exportNode.node);
@@ -62,7 +75,7 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
                 dc.Run(circuit);
                 break;
             case Mode.Transient:
-                var step_ = 1e-2;
+                const double step_ = 1e-2;
                 var final = 1.0;
                 var tran = new Transient("Tran 1", step_, final);
 
@@ -70,6 +83,7 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
                 {
                     inputList.Add(i);
                 }
+
                 tran.ExportSimulationData += (sender, args) =>
                 {
                     var output = args.GetVoltage(exportNode.node);
@@ -83,6 +97,7 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
                 {
                     outputList.Add(0);
                 }
+
                 break;
             case Mode.ACSweep:
                 const double initial = 1e-2;
@@ -104,8 +119,6 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
         }
 
 
-        
-
         var response = new SimulationResponse
         {
             Input = inputList,
@@ -114,7 +127,8 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
 
         return response;
     }
-    private List<double> _generateFrequencyPoints(double initial, double final, int pointsPerDecade)
+
+    private static List<double> _generateFrequencyPoints(double initial, double final, int pointsPerDecade)
     {
         var frequencyPoints = new List<double>();
 

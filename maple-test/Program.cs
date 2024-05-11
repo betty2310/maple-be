@@ -59,8 +59,9 @@ public class Program
     public static void Main()
     {
         //Console.WriteLine(Roles.Administrator);
-        SpiceSharpParse();
-        SpiceSharp();
+        // SpiceSharpParse();
+        // SpiceSharp();
+        SpiceSharpParserDiode();
     }
 
     public static void SpiceSharpParse()
@@ -74,15 +75,18 @@ public class Program
         //     //".SAVE v(2)",
         //     ".END"
         // );
-        
+
         var netlistString = string.Join(Environment.NewLine,
             "test",
             "VS	1 0	AC 1 SIN(0 1 2KHZ 0 0 0)",
             "R1	1 2 1000",
             "C1 2 0	0.032UF",
+            "D1 1 0 1N914",
+            "Q1 15 3 0 NPNSTRONG",
+            ".model 1N914 D(Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9)",
             ".END"
         );
-        
+
 
         //var netlistText = string.Join(Environment.NewLine,
         //               "Diode circuit",
@@ -134,6 +138,41 @@ public class Program
         };
 
         // Run the simulation
+        dc.Run(circuit);
+    }
+
+    public static void SpiceSharpParserDiode()
+    {
+        var netlistText = string.Join(Environment.NewLine,
+            "Diode circuit",
+            "D1 OUT 0 1N914",
+            "V1 OUT 0 0",
+            ".model 1N914 D(Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9)",
+            ".DC V1 -1 1 10e-3",
+            ".SAVE i(V1) i(D1)",
+            ".END");
+
+        // Parsing part
+        var parser = new SpiceNetlistParser();
+        var parseResult = parser.ParseNetlist(netlistText);
+        var netlist = parseResult.FinalModel;
+
+        // Translating netlist model to SpiceSharp
+        var reader = new SpiceSharpReader();
+        var spiceSharpModel = reader.Read(netlist);
+
+        var d1 = new Diode("D1", "OUT", "0", "1N914");
+        var circuit = spiceSharpModel.Circuit;
+        var diodeNode = circuit.ToList().First(circuit => circuit.Name.Contains('D'));
+        circuit.Remove(diodeNode);
+        circuit.Add(d1);
+        // Simulation using SpiceSharp
+        // var simulation = spiceSharpModel.Simulations.Single();
+        var dc = new DC("DC 1", "V1", -1, 1, 10e-3);
+        // var export = spiceSharpModel.Exports.Find(e => e.Name == "i(V1)");
+        var currentExport = new RealPropertyExport(dc, "V1", "i");
+
+        dc.ExportSimulationData += (sender, args) => Console.WriteLine(currentExport.Value);
         dc.Run(circuit);
     }
 }

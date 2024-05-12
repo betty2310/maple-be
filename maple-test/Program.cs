@@ -63,6 +63,8 @@ public class Program
         // SpiceSharp();
         // SpiceSharpParserDiode();
         new MachChinhLuuNuaChuky().Execute();
+        Console.WriteLine("=======================");
+        new MachChinhLuuNuaChuky().ExecuteWithSwitch();
     }
 
     public static void SpiceSharpParse()

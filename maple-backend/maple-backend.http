@@ -1,9 +1,5 @@
 @maple_backend_HostAddress = http://localhost:5109
 
-GET {{maple_backend_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
 ### Post mach chinh luu nua chu ky
 POST {{url}}/api/Simulator
 Content-Type: application/json

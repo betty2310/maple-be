@@ -53,7 +53,6 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
                 circuit.Add(new DiodeModel1N914().GetModel());
             }
         }
-        
 
         var xAxisValues = new List<double>();
         var yAxisvalues = new List<double>();

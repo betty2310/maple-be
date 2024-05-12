@@ -10,7 +10,7 @@ public class MachChinhLuuNuaChuky
     {
         var voltageSource = new VoltageSource("V1", "1", "0", new Sine(0, 1, 50));
         voltageSource.SetParameter("acmag", 1.0);
-        var diode = new Diode("D1", "2", "1", "1N914");
+        var diode = new Diode("D1", "1", "2", "1N914");
         var resistor = new Resistor("R1", "0", "2", 1000);
         var diodeModel = Create1N914Model();
 
@@ -18,6 +18,27 @@ public class MachChinhLuuNuaChuky
         var tran = new Transient("tran", 1e-3, 0.1);
 
         var voltateOutputExport = new RealVoltageExport(tran, "2");
+        tran.ExportSimulationData += (sender, args) =>
+        {
+            var output = voltateOutputExport.Value;
+            Console.WriteLine($"V(out)={output}");
+        };
+        tran.Run(ckt);
+    }
+    
+    public void ExecuteWithSwitch()
+    {
+        var voltageSource = new VoltageSource("V1", "1", "0", new Sine(0, 1, 50));
+        voltageSource.SetParameter("acmag", 1.0);
+        var switchNode = new Resistor("RS1", "2", "1", 1000000000);
+        var diode = new Diode("D1", "3", "2", "1N914");
+        var resistor = new Resistor("R1", "0", "3", 1000);
+        var diodeModel = Create1N914Model();
+
+        var ckt = new Circuit(voltageSource, resistor, diode, diodeModel, switchNode);
+        var tran = new Transient("tran", 1e-3, 0.1);
+
+        var voltateOutputExport = new RealVoltageExport(tran, "3");
         tran.ExportSimulationData += (sender, args) =>
         {
             var output = voltateOutputExport.Value;

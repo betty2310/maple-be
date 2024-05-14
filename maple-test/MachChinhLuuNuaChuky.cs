@@ -2,7 +2,7 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
-namespace Maple;
+namespace maple_test;
 
 public class MachChinhLuuNuaChuky
 {

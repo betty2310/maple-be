@@ -1,12 +1,11 @@
-﻿using SpiceSharp;
+﻿using System.Text;
+using System.Text.Json;
+using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharpParser;
-using SpiceSharpParser.ModelReaders;
-using System.Text;
-using System.Text.Json;
 
-namespace Maple;
+namespace maple_test;
 
 public abstract class Roles
 {
@@ -62,52 +61,23 @@ public class Program
         // SpiceSharpParse();
         // SpiceSharp();
         // SpiceSharpParserDiode();
-        new MachChinhLuuNuaChuky().Execute();
+        // new MachChinhLuuNuaChuky().Execute();
         Console.WriteLine("=======================");
-        new MachChinhLuuNuaChuky().ExecuteWithSwitch();
+        // new MachChinhLuuNuaChuky().ExecuteWithSwitch();
+        new MachTransistor().Execute();
     }
 
-    public static void SpiceSharpParse()
+    private static void SpiceSharpParse()
     {
-        // string netlistString = string.Join(Environment.NewLine,
-        //     "test",
-        //     "V0 1 0 1",
-        //     "R1 2 1 1000",
-        //     "R3 0 2 1000",
-        //     //".DC V0 -1 1 10e-3",
-        //     //".SAVE v(2)",
-        //     ".END"
-        // );
-
         var netlistString = string.Join(Environment.NewLine,
             "test",
-            "VS	1 0	AC 1 SIN(0 1 2KHZ 0 0 0)",
-            "R1	1 2 1000",
-            "C1 2 0	0.032UF",
-            "D1 1 0 1N914",
-            "Q1 15 3 0 NPNSTRONG",
-            ".model 1N914 D(Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9)",
+            "V1	1 0 0",
+            "V2 2 0 0",
+            "Q1 2 1 0 0 mjd44h11",
+            ".model mjd44h11 IS = 1.45468e-14 BF = 135.617 NF = 0.85 VAF = 10",
             ".END"
         );
-
-
-        //var netlistText = string.Join(Environment.NewLine,
-        //               "Diode circuit",
-        //               "D1 1 0 1N914",
-        //               "V1 1 0 0",
-        //               ".model 1N914 D(Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9)",
-        //               ".DC V1 -1 1 10e-3",
-        //               ".SAVE i(D1)",
-        //               ".END");
-        var netlistText = string.Join(Environment.NewLine,
-            "Diode circuit",
-            "V1 in 0 0 AC 1",
-            "R1 in out 10k",
-            "C1 out 0 1u",
-            ".AC dec 5 10m 1k",
-            ".SAVE v(out)",
-            ".END"
-        );
+        
 
         // Parse the SPICE netlist
         var parser = new SpiceNetlistParser();

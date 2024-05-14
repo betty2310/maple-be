@@ -16,3 +16,35 @@ Content-Type: application/json
   "mode": 0
 }
 
+### Post mach co transistor
+POST {{url}}/api/Simulator
+Content-Type: application/json
+
+{
+  "netlist": "Circuit Analysis\nV1 1 0 1\nV2 2 0 1\nQ1 2 1 0 0 mjd44h11\n.END",
+  "title": "Circuit Analysis\n",
+  "exportNodes": [
+    {
+      "type": 0,
+      "node": "2"
+    }
+  ],
+  "mode": 1
+}
+
+
+### Post mach co transistor
+POST {{url}}/api/Simulator
+Content-Type: application/json
+
+{
+  "netlist": "Circuit Analysis\nQ1 2 1 0 0 mjd44h11\nV1 2 0 1\nV2 1 0 1\n.END",
+  "title": "Circuit Analysis\n",
+  "exportNodes": [
+    {
+      "type": 0,
+      "node": "2"
+    }
+  ],
+  "mode": 1
+}

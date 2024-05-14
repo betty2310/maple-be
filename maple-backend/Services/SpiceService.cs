@@ -39,7 +39,7 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
 
         var circuit = spiceSharpModel.Circuit;
         var voltageSource = circuit.ToList().First(circuit => circuit.Name.Contains('V'));
-        
+
         // we need to remote the diode node and add my custom
         var diodeNodes = circuit.ToList().Where(circuit => circuit.Name.Contains('D')).ToList();
         if (diodeNodes.Count > 0)
@@ -50,8 +50,20 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
                 var diode = new Diode(cp.Name, cp.Nodes[0], cp.Nodes[1], "1N914");
                 circuit.Remove(diodeNode);
                 circuit.Add(diode);
-                circuit.Add(new DiodeModel1N914().GetModel());
             }
+
+            circuit.Add(new DiodeModel1N914().GetModel());
+        }
+
+        var transistorNodes = BjtTransistorHelper.GetTransistorsFromNetlist(netlistStr);
+
+        if (transistorNodes.Count > 0)
+        {
+            foreach (var transistorNode in transistorNodes)
+            {
+                circuit.Add(transistorNode);
+            }
+            circuit.Add(BjtTransistorHelper.NPNmjd44h11Transistor());
         }
 
         var xAxisValues = new List<double>();
@@ -85,6 +97,7 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
                 }
                 catch (ValidationFailedException e)
                 {
+                    LoggingUtil.LogMessage(logger, LogLevel.Error, e.Message);
                     yAxisvalues.Add(0);
                 }
 
@@ -118,20 +131,21 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
         return response;
     }
 
-    private static void SimulateDcSweep(IEntity voltageSource, List<double> inputList, ExportNode exportNode, List<double> outputList,
+    private static void SimulateDcSweep(IEntity voltageSource, List<double> inputList, ExportNode exportNode,
+        List<double> outputList,
         Circuit circuit)
     {
-        // Simulation using SpiceSharp
-        const double start = -1.0;
-        const double stop = 1.0;
-        const double step = 0.2;
-        var dc = new DC("DC 1", voltageSource.Name, start, stop, step);
+        const double start = 0;
+        const double stop = 3;
+        const double step = 0.1;
+        var voltageSources= circuit.ToList().Where(c => c.Name.Contains('V')).ToList();
+        var sweeps = voltageSources.Select(source => new ParameterSweep(source.Name, new LinearSweep(0, 3, 0.1))).ToList();
 
+        var dc = new DC("DC 1", sweeps);
         for (var i = start; i <= stop; i += step)
         {
             inputList.Add(i);
         }
-
         dc.ExportSimulationData += (sender, args) =>
         {
             var output = args.GetVoltage(exportNode.node);

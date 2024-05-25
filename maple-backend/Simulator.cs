@@ -12,8 +12,22 @@ namespace maple_backend
         [HttpPost]
         public IActionResult Post([FromBody] SimulationRequest simulation)
         {
-           var response =  spiceService.Run(simulation);
-           return Ok(response);
+            if (simulation.ExportNodes.Count == 0)
+            {
+                return BadRequest("Export nodes are required");
+            }
+
+            SimulationResponse response;
+            try
+            {
+                response = spiceService.Run(simulation);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            return Ok(response);
         }
     }
 }

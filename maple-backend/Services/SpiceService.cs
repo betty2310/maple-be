@@ -38,7 +38,17 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
         var spiceSharpModel = reader.Read(netlist);
 
         var circuit = spiceSharpModel.Circuit;
-        var voltageSource = circuit.ToList().First(circuit => circuit.Name.Contains('V'));
+        
+        IEntity voltageSource;
+        try
+        {
+             voltageSource = circuit.ToList().First(circuit => circuit.Name.Contains('V'));
+        }
+        catch (InvalidOperationException e)
+        {
+            Console.WriteLine(e.Message);
+            throw new Exception("The circuit must have a voltage source");
+        }
 
         // we need to remote the diode node and add my custom
         var diodeNodes = circuit.ToList().Where(circuit => circuit.Name.Contains('D')).ToList();

@@ -8,6 +8,6 @@ public enum ExportType
 
 public class ExportNode
 {
-    public ExportType type { get; set; }
+    public ExportType Type { get; set; }
     public string node { get; set; }
 }

@@ -21,12 +21,12 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
         return nestList;
     }
 
-    public SimulationResponse Run(NetlistRequest netlistRequest)
+    public SimulationResponse Run(SimulationRequest simulationRequest)
     {
-        var netlistStr = netlistRequest.Netlist.Replace("\\n", "\n");
+        var netlistStr = simulationRequest.Netlist.Replace("\\n", "\n");
         LoggingUtil.LogMessage(logger, LogLevel.Information, netlistStr);
 
-        var exportNode = netlistRequest.ExportNodes[0];
+        var exportNode = simulationRequest.ExportNodes[0];
 
         LoggingUtil.LogMessage(logger, LogLevel.Information, exportNode.node);
 
@@ -68,7 +68,7 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
 
         var xAxisValues = new List<double>();
         var yAxisvalues = new List<double>();
-        var mode = netlistRequest.Mode;
+        var mode = simulationRequest.Mode;
 
         switch (mode)
         {

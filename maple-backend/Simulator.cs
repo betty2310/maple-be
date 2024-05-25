@@ -10,9 +10,9 @@ namespace maple_backend
     {
         // POST api/<Simulator>
         [HttpPost]
-        public IActionResult Post([FromBody] NetlistRequest netlist)
+        public IActionResult Post([FromBody] SimulationRequest simulation)
         {
-           var response =  spiceService.Run(netlist);
+           var response =  spiceService.Run(simulation);
            return Ok(response);
         }
     }

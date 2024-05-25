@@ -7,7 +7,7 @@ public enum Mode
     ACSweep,
 }
 
-public class NetlistRequest
+public class SimulationRequest
 {
     public string Netlist { get; set; }
     public string? Title { get; set; }

@@ -26,45 +26,34 @@ public class Program
     public static void SpiceSharp()
     {
         var ckt = new Circuit(
-            new VoltageSource("V1", "r1", "0", 1.0),
-            new Resistor("R1", "r2", "r1", 1.0e4),
-            new Resistor("R2", "0", "r2", 2.0e4)
+            new VoltageSource("V1", "1", "0", 1.0),
+            new Resistor("R1", "1", "2", 1),
+            new Resistor("R2", "2", "0", 2)
         );
 
-        var dc = new DC("DC 1", "V1", -1.0, 1.0, 0.2);
+        var dc = new DC("dc", new[] {
+            new ParameterSweep("V1", new LinearSweep(0, 0.8, 0.1)),
+        });
 
-        // Create the simulation
-        var tran = new Transient("Tran 1", 1e-3, 0.1);
-
-        // Make the exports
-        var inputExport = new RealVoltageExport(tran, "R1");
-        var outputExport = new RealVoltageExport(tran, "R2");
-
-        // Catch exported data
-        var sb = new StringBuilder();
-        tran.ExportSimulationData += (sender, args) =>
+        var export = new RealPropertyExport(dc, "R1", "i");
+        dc.ExportSimulationData += (sender, args) =>
         {
-            // var input = args.GetVoltage("R1");
-            // var output = args.GetVoltage("R2");
-            // sb.AppendLine($"V(in)={input} V(out)={output}");
-            // Console.WriteLine($"V(in)={input} V(out)={output}");
-            var input = inputExport.Value;
-            var output = outputExport.Value;
-            Console.WriteLine($"V(in)={input} V(out)={output}");
+            var values = dc.GetCurrentSweepValue();
+            Console.WriteLine($"V(in)={values[0]} i(V1)={export.Value}");
         };
-        tran.Run(ckt);
+        dc.Run(ckt);
     }
 
     public static void Main()
     {
         //Console.WriteLine(Roles.Administrator);
         // SpiceSharpParse();
-        // SpiceSharp();
+        SpiceSharp();
         // SpiceSharpParserDiode();
         // new MachChinhLuuNuaChuky().Execute();
-        Console.WriteLine("=======================");
+        // Console.WriteLine("=======================");
         // new MachChinhLuuNuaChuky().ExecuteWithSwitch();
-        new MachTransistor().Execute();
+        // new MachTransistor().Execute();
     }
 
     private static void SpiceSharpParse()

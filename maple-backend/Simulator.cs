@@ -17,7 +17,7 @@ namespace maple_backend
                 return BadRequest("Export nodes are required");
             }
 
-            SimulationResponse response;
+            List<SimulationResponse> response;
             try
             {
                 response = spiceService.Run(simulation);
@@ -26,7 +26,6 @@ namespace maple_backend
             {
                 return BadRequest(e.Message);
             }
-
             return Ok(response);
         }
     }

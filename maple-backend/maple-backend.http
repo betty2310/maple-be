@@ -16,6 +16,30 @@ Content-Type: application/json
   "mode": 0
 }
 
+### Post mach simple
+POST {{url}}/api/Simulator
+Content-Type: application/json
+
+{
+  "netlist": "Circuit Analysis\\nV2 1 0 1.0\\nR1 1 2 1000\\nR2 2 0 2000\\n.END",
+  "title": "Circuit Analysis\n",
+  "exportNodes": [
+    {
+      "type": 0,
+      "node": "1"
+    },
+    {
+      "type": 0,
+      "node": "2"
+    },
+    {
+      "type": 1,
+      "node": "R1"
+    }
+  ],
+  "mode": 1
+}
+
 ### Post test case no export node
 POST {{url}}/api/Simulator
 Content-Type: application/json
@@ -46,7 +70,7 @@ Content-Type: application/json
 }
 
 
-### Post mach co transistor
+### Post mach co diode
 POST {{url}}/api/Simulator
 Content-Type: application/json
 
@@ -56,12 +80,33 @@ Content-Type: application/json
   "exportNodes": [
     {
       "type": 1,
-      "node": "1"
+      "node": "V1"
     },
     {
       "type": 0,
       "node": "2"
     }
   ],
-  "mode": 0
+  "mode": 1
+}
+
+
+### Post mach AC simulator
+POST {{url}}/api/Simulator
+Content-Type: application/json
+
+{
+  "netlist": "Circuit Analysis\nV1 1 0 AC 1 SIN(0 1 50 0 0 0)\nR1 1 2 10000\nC1 2 0 1e-6\n.END",
+  "title": "Circuit Analysis\n",
+  "exportNodes": [
+    {
+      "type": 1,
+      "node": "V1"
+    },
+    {
+      "type": 0,
+      "node": "2"
+    }
+  ],
+  "mode": 2
 }

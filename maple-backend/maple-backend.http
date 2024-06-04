@@ -110,3 +110,8 @@ Content-Type: application/json
   ],
   "mode": 2
 }
+
+### 
+GET {{url}}/api/projects
+Content-Type: application/json
+Authorization: Bearer {{token}}

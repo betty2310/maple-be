@@ -1,21 +1,33 @@
-using Maple.Application.Services.Simulator.Queries;
+using Maple.Application.Simulator.Commands.Simulate;
+using Maple.Application.Simulator.Common;
 using Maple.Contracts.Simulator;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Maple.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class SimulatorController(ISimulatorQueryService simulatorQueryService) : ApiController
+public class SimulatorController(ISender mediator) : ApiController
 {
     // POST api/<Simulator>
     [HttpPost]
-    public IActionResult Post([FromBody] SimulationRequest simulation)
+    public async Task<IActionResult> Post([FromBody] SimulationRequest simulation)
     {
-        var response = simulatorQueryService.Run(simulation.Netlist, simulation.ExportNodes, simulation.Mode);
+        var command = new SimulateCommand(simulation.Netlist, simulation.ExportNodes, simulation.Mode);
+        var response = await mediator.Send(command);
         return response.Match(
-            Ok,
+            result => Ok(Map(result)),
             Problem
         );
+    }
+
+    private static List<SimulationResponse> Map(List<SimulateResult> result)
+    {
+        return result.Select(r => new SimulationResponse
+        {
+            Input = r.Input,
+            ExportNodes = r.ExportNodes,
+        }).ToList();
     }
 }

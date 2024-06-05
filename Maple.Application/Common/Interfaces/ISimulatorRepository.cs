@@ -1,8 +1,9 @@
+using Maple.Application.Simulator.Common;
 using Maple.Domain.Common;
 
 namespace Maple.Application.Common.Interfaces;
 
 public interface ISimulatorRepository
 {
-    List<Domain.Entities.Simulator> Run(string netlist, List<ExportNode> exportNodes, SimulatorMode mode);
+    List<SimulateResult> Run(string netlist, List<ExportNode> exportNodes, SimulatorMode mode);
 }

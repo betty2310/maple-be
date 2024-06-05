@@ -1,5 +1,6 @@
 using System.Numerics;
 using Maple.Application.Common.Interfaces;
+using Maple.Application.Simulator.Common;
 using Maple.Domain.Common;
 using Maple.Infrastructure.Common;
 using Maple.Infrastructure.Common.DiodeModels;
@@ -14,7 +15,7 @@ namespace Maple.Infrastructure.Simulator;
 
 public class SimulatorRepository : ISimulatorRepository
 {
-    public List<Domain.Entities.Simulator> Run(string netlist, List<ExportNode> exportNodes, SimulatorMode mode)
+    public List<SimulateResult> Run(string netlist, List<ExportNode> exportNodes, SimulatorMode mode)
     {
         var netlistStr = netlist.Replace("\\n", "\n");
 
@@ -62,7 +63,7 @@ public class SimulatorRepository : ISimulatorRepository
             circuit.Add(BjtTransistor.NpNmjd44H11Transistor());
         }
 
-        var response = new List<Domain.Entities.Simulator>();
+        var response = new List<SimulateResult>();
 
         switch (mode)
         {
@@ -126,15 +127,15 @@ public class SimulatorRepository : ISimulatorRepository
     /// <param name="sim">Simulation</param>
     /// <param name="ckt">Circuit</param>
     /// <param name="exports">Exports</param>
-    private static List<Domain.Entities.Simulator> _analyzeDC(DC sim, Circuit ckt, IEnumerable<IExport<double>> exports)
+    private static List<SimulateResult> _analyzeDC(DC sim, Circuit ckt, IEnumerable<IExport<double>> exports)
     {
-        var responses = new List<Domain.Entities.Simulator>();
+        var responses = new List<SimulateResult>();
         ArgumentNullException.ThrowIfNull(exports);
 
         sim.ExportSimulationData += (sender, data) =>
         {
             using var exportIt = exports.GetEnumerator();
-            var response = new Domain.Entities.Simulator();
+            var response = new SimulateResult();
             var index = 0;
 
             while (exportIt.MoveNext())
@@ -160,17 +161,17 @@ public class SimulatorRepository : ISimulatorRepository
     /// <param name="sim">Simulation</param>
     /// <param name="ckt">Circuit</param>
     /// <param name="exports">Exports</param>
-    private static List<Domain.Entities.Simulator> _analyzeTransient(Transient sim, Circuit ckt,
+    private static List<SimulateResult> _analyzeTransient(Transient sim, Circuit ckt,
         IEnumerable<IExport<double>> exports)
     {
-        var responses = new List<Domain.Entities.Simulator>();
+        var responses = new List<SimulateResult>();
 
         ArgumentNullException.ThrowIfNull(exports);
 
         sim.ExportSimulationData += (sender, data) =>
         {
             using var exportsIt = exports.GetEnumerator();
-            var response = new Domain.Entities.Simulator();
+            var response = new SimulateResult();
 
             var index = 0;
             while (exportsIt.MoveNext())
@@ -190,17 +191,17 @@ public class SimulatorRepository : ISimulatorRepository
         return responses;
     }
 
-    private static List<Domain.Entities.Simulator> _analyzeAC(AC sim, Circuit ckt,
+    private static List<SimulateResult> _analyzeAC(AC sim, Circuit ckt,
         IEnumerable<IExport<Complex>> exports)
     {
-        var responses = new List<Domain.Entities.Simulator>();
+        var responses = new List<SimulateResult>();
 
         ArgumentNullException.ThrowIfNull(exports);
 
         sim.ExportSimulationData += (sender, data) =>
         {
             using var exportsIt = exports.GetEnumerator();
-            var response = new Domain.Entities.Simulator();
+            var response = new SimulateResult();
 
             var index = 0;
             while (exportsIt.MoveNext())

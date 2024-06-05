@@ -28,4 +28,9 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Maple.Contracts\Maple.Contracts.csproj" />
+      <ProjectReference Include="..\Maple.Application\Maple.Application.csproj" />
+    </ItemGroup>
+
 </Project>

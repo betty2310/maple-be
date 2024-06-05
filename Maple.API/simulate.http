@@ -1,0 +1,110 @@
+### Post mach chinh luu nua chu ky
+@url = http://localhost:5109
+POST {{url}}/api/Simulator
+Content-Type: application/json
+
+{
+  "netlist": "Circuit Analysis\\nD1 2 1 1N914\\nR1 0 2 1000\\V1 1 0 AC 1 SIN(0 1 50 0 0 0)\\n.END",
+  "title": "Circuit Analysis\n",
+  "exportNodes": [
+    {
+      "type": 0,
+      "node": "2"
+    }
+  ],
+  "mode": 0
+}
+
+### Post mach simple
+POST {{url}}/api/Simulator
+Content-Type: application/json
+
+{
+  "netlist": "Circuit Analysis\\nV2 1 0 1.0\\nR1 1 2 1000\\nR2 2 0 2000\\n.END",
+  "title": "Circuit Analysis\n",
+  "exportNodes": [
+    {
+      "type": 0,
+      "node": "1"
+    },
+    {
+      "type": 0,
+      "node": "2"
+    },
+    {
+      "type": 1,
+      "node": "R1"
+    }
+  ],
+  "mode": 1
+}
+
+### Post test case no export node
+POST {{url}}/api/Simulator
+Content-Type: application/json
+
+{
+  "netlist": "Circuit Analysis\\nD1 2 1 1N914\\nR1 0 2 1000\\nV1 1 0 AC 1 SIN(0 1 50 0 0 0)\\n.END",
+  "title": "Circuit Analysis\n",
+  "exportNodes": [
+  ],
+  "mode": 0
+}
+
+### Post mach co transistor
+POST {{url}}/api/Simulator
+Content-Type: application/json
+
+{
+  "netlist": "Circuit Analysis\nV1 1 0 1\nV2 2 0 1\nQ1 2 1 0 0 mjd44h11\n.END",
+  "title": "Circuit Analysis\n",
+  "exportNodes": [
+    {
+      "type": 0,
+      "node": "2"
+    }
+  ],
+  "mode": 1
+}
+
+
+### Post mach co diode
+POST {{url}}/api/Simulator
+Content-Type: application/json
+
+{
+  "netlist": "Circuit Analysis\nV1 1 0 1\nR1 1 2 1000\nR2 2 3 1000\nD1 3 0 1N914\n.END",
+  "title": "Circuit Analysis\n",
+  "exportNodes": [
+    {
+      "type": 1,
+      "node": "V1"
+    },
+    {
+      "type": 0,
+      "node": "2"
+    }
+  ],
+  "mode": 1
+}
+
+
+### Post khong co AC simulator
+POST {{url}}/api/Simulator
+Content-Type: application/json
+
+{
+  "netlist": "Circuit Analysis\nR1 1 2 10000\nC1 2 0 1e-6\n.END",
+  "title": "Circuit Analysis\n",
+  "exportNodes": [
+    {
+      "type": 1,
+      "node": "V1"
+    },
+    {
+      "type": 0,
+      "node": "2"
+    }
+  ],
+  "mode": 2
+}

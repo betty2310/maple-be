@@ -1,8 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "maple-backend", "maple-backend\maple-backend.csproj", "{DF9FD313-F863-453D-94B5-9DF8253D4AF7}"
+#
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.API", "Maple.API\Maple.API.csproj", "{DF9FD313-F863-453D-94B5-9DF8253D4AF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "maple-test", "maple-test\maple-test.csproj", "{CBF14B9A-981A-4AF3-B1DB-252A6592C814}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Application", "Maple.Application\Maple.Application.csproj", "{CB3A85F8-7DF5-4C87-91FA-42B15704C6C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Contracts", "Maple.Contracts\Maple.Contracts.csproj", "{0F6790C7-FFCE-4BE4-BE0D-60A5D4C6733E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Infrastructure", "Maple.Infrastructure\Maple.Infrastructure.csproj", "{43D4B640-FE1C-4B21-8BDB-ACF57ED7CD8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Domain", "Maple.Domain\Maple.Domain.csproj", "{3D032DED-A961-41A7-A366-27345B15B23F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +21,21 @@ Global
 		{DF9FD313-F863-453D-94B5-9DF8253D4AF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF9FD313-F863-453D-94B5-9DF8253D4AF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF9FD313-F863-453D-94B5-9DF8253D4AF7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CBF14B9A-981A-4AF3-B1DB-252A6592C814}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CBF14B9A-981A-4AF3-B1DB-252A6592C814}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CBF14B9A-981A-4AF3-B1DB-252A6592C814}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CBF14B9A-981A-4AF3-B1DB-252A6592C814}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB3A85F8-7DF5-4C87-91FA-42B15704C6C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB3A85F8-7DF5-4C87-91FA-42B15704C6C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB3A85F8-7DF5-4C87-91FA-42B15704C6C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB3A85F8-7DF5-4C87-91FA-42B15704C6C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F6790C7-FFCE-4BE4-BE0D-60A5D4C6733E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F6790C7-FFCE-4BE4-BE0D-60A5D4C6733E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F6790C7-FFCE-4BE4-BE0D-60A5D4C6733E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F6790C7-FFCE-4BE4-BE0D-60A5D4C6733E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43D4B640-FE1C-4B21-8BDB-ACF57ED7CD8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43D4B640-FE1C-4B21-8BDB-ACF57ED7CD8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43D4B640-FE1C-4B21-8BDB-ACF57ED7CD8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43D4B640-FE1C-4B21-8BDB-ACF57ED7CD8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D032DED-A961-41A7-A366-27345B15B23F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D032DED-A961-41A7-A366-27345B15B23F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D032DED-A961-41A7-A366-27345B15B23F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D032DED-A961-41A7-A366-27345B15B23F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

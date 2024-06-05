@@ -1,6 +1,6 @@
-namespace maple_backend.DiodeModels;
+namespace Maple.Infrastructure.Common.DiodeModels;
 
-public class DiodeModel1N914 : DiodeModel{
+public class DiodeModel1N914 : IDiodeModel{
     public SpiceSharp.Components.DiodeModel GetModel()
     {
         var diodeModel = new SpiceSharp.Components.DiodeModel("1N914");

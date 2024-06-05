@@ -1,7 +1,7 @@
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
-namespace maple_backend.Models;
+namespace Maple.API.Models;
 
 [Table("projects")]
 public class Projects : BaseModel

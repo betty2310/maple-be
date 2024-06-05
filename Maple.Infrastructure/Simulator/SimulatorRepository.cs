@@ -1,8 +1,8 @@
 using System.Numerics;
-using System.Text;
-using maple_backend.DiodeModels;
-using maple_backend.Models;
-using maple_backend.Utils;
+using Maple.Application.Common.Interfaces;
+using Maple.Domain.Common;
+using Maple.Infrastructure.Common;
+using Maple.Infrastructure.Common.DiodeModels;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Entities;
@@ -10,46 +10,28 @@ using SpiceSharp.Simulations;
 using SpiceSharpParser;
 using SpiceSharpParser.Models.Netlist.Spice;
 
-namespace maple_backend.Services;
+namespace Maple.Infrastructure.Simulator;
 
-public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
+public class SimulatorRepository : ISimulatorRepository
 {
-    private static SpiceNetlist Parser(string netlistText)
+    public List<Domain.Entities.Simulator> Run(string netlist, List<ExportNode> exportNodes, SimulatorMode mode)
     {
-        var parser = new SpiceNetlistParser();
-        var parseResult = parser.ParseNetlist(netlistText);
-        var nestList = parseResult.FinalModel;
-        return nestList;
-    }
+        var netlistStr = netlist.Replace("\\n", "\n");
 
-    public List<SimulationResponse> Run(SimulationRequest simulationRequest)
-    {
-        var netlistStr = simulationRequest.Netlist.Replace("\\n", "\n");
-        LoggingUtil.LogMessage(logger, LogLevel.Information, netlistStr);
+        var netlistParser = Parser(netlistStr);
 
-        var exportNodes = simulationRequest.ExportNodes;
-
-        // LoggingUtil.LogMessage(logger, LogLevel.Information, exportNode.ToString());
-
-        // Parsing part
-        var netlist = Parser(netlistStr);
-
-        // Translating netlist model to SpiceSharp
         var reader = new SpiceSharpReader();
-        var spiceSharpModel = reader.Read(netlist);
+        var spiceSharpModel = reader.Read(netlistParser);
 
         var circuit = spiceSharpModel.Circuit;
 
         // Check if the circuit has a voltage source
-        IEnumerable<IEntity> voltageSources;
-        try
+
+        IEnumerable<IEntity> voltageSources = circuit.ToList().Where(e => e.Name.Contains('V'));
+        var enumerable = voltageSources.ToList();
+        if (enumerable.Count == 0)
         {
-            voltageSources = circuit.ToList().Where(e => e.Name.Contains('V'));
-        }
-        catch (InvalidOperationException e)
-        {
-            Console.WriteLine(e.Message);
-            throw new Exception("The circuit must have a voltage source");
+            throw new InvalidOperationException("Must have a voltage source");
         }
 
         // we need to remove the diode node and add my custom
@@ -66,9 +48,9 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
 
             circuit.Add(new DiodeModel1N914().GetModel());
         }
-        
+
         // similar to transistor
-        var transistorNodes = BjtTransistorHelper.GetTransistorsFromNetlist(netlistStr);
+        var transistorNodes = BjtTransistor.GetTransistorsFromNetlist(netlistStr);
 
         if (transistorNodes.Count > 0)
         {
@@ -77,16 +59,15 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
                 circuit.Add(transistorNode);
             }
 
-            circuit.Add(BjtTransistorHelper.NPNmjd44h11Transistor());
+            circuit.Add(BjtTransistor.NpNmjd44H11Transistor());
         }
 
-        var mode = simulationRequest.Mode;
-        var response = new List<SimulationResponse>();
+        var response = new List<Domain.Entities.Simulator>();
 
         switch (mode)
         {
-            case Mode.DCSweep:
-                var sweeps = voltageSources
+            case SimulatorMode.DCSweep:
+                var sweeps = enumerable
                     .Select(a => new ParameterSweep(a.Name, new LinearSweep(0, 3, 0.1)))
                     .ToList();
 
@@ -100,7 +81,7 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
 
                 response = _analyzeDC(dc, circuit, exports);
                 break;
-            case Mode.Transient:
+            case SimulatorMode.Transient:
                 const double step = 1e-3;
                 const double final = 0.1;
                 var tran = new Transient("Tran 1", step, final);
@@ -114,7 +95,7 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
 
                 response = _analyzeTransient(tran, circuit, exportsTransient);
                 break;
-            case Mode.ACSweep:
+            case SimulatorMode.ACSweep:
                 var ac = new AC("AC 1", new DecadeSweep(1e-2, 1.0e3, 5));
                 var exportsAc = exportNodes.Select<ExportNode, IExport<Complex>>(node =>
                     node.Type == ExportType.I
@@ -131,20 +112,12 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
         return response;
     }
 
-    private static List<double> _generateFrequencyPoints(double initial, double final, int pointsPerDecade)
+    private static SpiceNetlist Parser(string netlistText)
     {
-        var frequencyPoints = new List<double>();
-
-        var decades = Math.Log10(final) - Math.Log10(initial);
-        var totalPoints = (int)(decades * pointsPerDecade);
-
-        for (var i = 0; i <= totalPoints; i++)
-        {
-            var frequency = initial * Math.Pow(10, (double)i / pointsPerDecade);
-            frequencyPoints.Add(frequency);
-        }
-
-        return frequencyPoints;
+        var parser = new SpiceNetlistParser();
+        var parseResult = parser.ParseNetlist(netlistText);
+        var nestList = parseResult.FinalModel;
+        return nestList;
     }
 
     /// <summary>
@@ -153,15 +126,15 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
     /// <param name="sim">Simulation</param>
     /// <param name="ckt">Circuit</param>
     /// <param name="exports">Exports</param>
-    private static List<SimulationResponse> _analyzeDC(DC sim, Circuit ckt, IEnumerable<IExport<double>> exports)
+    private static List<Domain.Entities.Simulator> _analyzeDC(DC sim, Circuit ckt, IEnumerable<IExport<double>> exports)
     {
-        var responses = new List<SimulationResponse>();
+        var responses = new List<Domain.Entities.Simulator>();
         ArgumentNullException.ThrowIfNull(exports);
 
         sim.ExportSimulationData += (sender, data) =>
         {
             using var exportIt = exports.GetEnumerator();
-            var response = new SimulationResponse();
+            var response = new Domain.Entities.Simulator();
             var index = 0;
 
             while (exportIt.MoveNext())
@@ -187,17 +160,17 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
     /// <param name="sim">Simulation</param>
     /// <param name="ckt">Circuit</param>
     /// <param name="exports">Exports</param>
-    private static List<SimulationResponse> _analyzeTransient(Transient sim, Circuit ckt,
+    private static List<Domain.Entities.Simulator> _analyzeTransient(Transient sim, Circuit ckt,
         IEnumerable<IExport<double>> exports)
     {
-        var responses = new List<SimulationResponse>();
+        var responses = new List<Domain.Entities.Simulator>();
 
         ArgumentNullException.ThrowIfNull(exports);
 
         sim.ExportSimulationData += (sender, data) =>
         {
             using var exportsIt = exports.GetEnumerator();
-            var response = new SimulationResponse();
+            var response = new Domain.Entities.Simulator();
 
             var index = 0;
             while (exportsIt.MoveNext())
@@ -217,16 +190,17 @@ public class SpiceService(ILogger<SpiceService> logger) : ISpiceService
         return responses;
     }
 
-    private static List<SimulationResponse> _analyzeAC(AC sim, Circuit ckt, IEnumerable<IExport<Complex>> exports)
+    private static List<Domain.Entities.Simulator> _analyzeAC(AC sim, Circuit ckt,
+        IEnumerable<IExport<Complex>> exports)
     {
-        var responses = new List<SimulationResponse>();
+        var responses = new List<Domain.Entities.Simulator>();
 
         ArgumentNullException.ThrowIfNull(exports);
 
         sim.ExportSimulationData += (sender, data) =>
         {
             using var exportsIt = exports.GetEnumerator();
-            var response = new SimulationResponse();
+            var response = new Domain.Entities.Simulator();
 
             var index = 0;
             while (exportsIt.MoveNext())

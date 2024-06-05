@@ -1,4 +1,4 @@
-namespace maple_backend.Models;
+namespace Maple.Domain.Common;
 
 public enum ExportType
 {

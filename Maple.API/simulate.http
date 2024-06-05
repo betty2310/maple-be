@@ -1,9 +1,10 @@
 ### Post mach chinh luu nua chu ky
+@url = http://localhost:5109
 POST {{url}}/api/Simulator
 Content-Type: application/json
 
 {
-  "netlist": "Circuit Analysis\\nD1 2 1 1N914\\nR1 0 2 1000\\nV1 1 0 AC 1 SIN(0 1 50 0 0 0)\\n.END",
+  "netlist": "Circuit Analysis\\nD1 2 1 1N914\\nR1 0 2 1000\\V1 1 0 AC 1 SIN(0 1 50 0 0 0)\\n.END",
   "title": "Circuit Analysis\n",
   "exportNodes": [
     {
@@ -46,7 +47,6 @@ Content-Type: application/json
   "netlist": "Circuit Analysis\\nD1 2 1 1N914\\nR1 0 2 1000\\nV1 1 0 AC 1 SIN(0 1 50 0 0 0)\\n.END",
   "title": "Circuit Analysis\n",
   "exportNodes": [
-    
   ],
   "mode": 0
 }
@@ -89,12 +89,12 @@ Content-Type: application/json
 }
 
 
-### Post mach AC simulator
+### Post khong co AC simulator
 POST {{url}}/api/Simulator
 Content-Type: application/json
 
 {
-  "netlist": "Circuit Analysis\nV1 1 0 AC 1 SIN(0 1 50 0 0 0)\nR1 1 2 10000\nC1 2 0 1e-6\n.END",
+  "netlist": "Circuit Analysis\nR1 1 2 10000\nC1 2 0 1e-6\n.END",
   "title": "Circuit Analysis\n",
   "exportNodes": [
     {
@@ -108,8 +108,3 @@ Content-Type: application/json
   ],
   "mode": 2
 }
-
-### 
-GET {{url}}/api/projects
-Content-Type: application/json
-Authorization: Bearer {{token}}

@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Projects\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

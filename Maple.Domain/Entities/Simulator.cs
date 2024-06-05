@@ -1,6 +1,6 @@
-namespace maple_backend.Models;
+namespace Maple.Domain.Entities;
 
-public class SimulationResponse
+public class Simulator
 {
     public double Input { get; set; }
     public Dictionary<string, double> ExportNodes { get; set; } = new();

@@ -1,5 +1,3 @@
-namespace maple_backend;
-
 public class SupabaseClient
 {
     private readonly Supabase.Client _client;

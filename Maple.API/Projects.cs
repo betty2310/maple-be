@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace maple_backend;
+namespace Maple.API;
 
 [Route("api/[controller]")]
 [Authorize]

@@ -1,7 +1,6 @@
-using System.Security.Claims;
 using System.Text;
-using maple_backend;
-using maple_backend.Services;
+using Maple.Application;
+using Maple.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -26,7 +25,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 
-builder.Services.AddScoped<ISpiceService, SpiceService>();
+builder.Services.AddApplication().AddInfrastructure();
 
 const string supabaseUrl = "https://timbkbpfurjfwtqnfrov.supabase.co";
 const string supabaseKey =
@@ -54,6 +53,8 @@ var app = builder.Build();
 var supabaseClient = app.Services.GetRequiredService<SupabaseClient>();
 await supabaseClient.InitializeAsync();
 
+app.UseExceptionHandler("/error");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -62,13 +63,6 @@ app.UseCors(builder => builder
     .AllowAnyMethod()
     .AllowAnyOrigin()
 );
-
-// Configure the HTTP request pipeline.
-// if (app.Environment.IsDevelopment())
-// {
-//     app.UseSwagger();
-//     app.UseSwaggerUI();
-// }
 
 app.UseHttpsRedirection();
 

@@ -4,7 +4,6 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <RootNamespace>maple_backend</RootNamespace>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
@@ -16,7 +15,7 @@
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.2" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
-        <PackageReference Include="SpiceSharp" Version="3.1.8" />
+        <PackageReference Include="SpiceSharp" Version="3.1.9" />
         <PackageReference Include="SpiceSharp-Parser" Version="3.1.5" />
         <PackageReference Include="supabase" Version="1.0.3" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
@@ -31,6 +30,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Maple.Contracts\Maple.Contracts.csproj" />
       <ProjectReference Include="..\Maple.Application\Maple.Application.csproj" />
+      <ProjectReference Include="..\Maple.Infrastructure\Maple.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

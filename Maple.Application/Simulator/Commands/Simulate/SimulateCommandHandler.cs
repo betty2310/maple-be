@@ -17,6 +17,7 @@ public class SimulateCommandHandler : IRequestHandler<SimulateCommand, ErrorOr<L
     
     public async Task<ErrorOr<List<SimulateResult>>> Handle(SimulateCommand command, CancellationToken cancellationToken)
     {
+        await Task.CompletedTask;
         if (command.ExportNodes.Count == 0)
         {
             return Errors.Simulator.NoExportNodesProvided;

@@ -1,4 +1,5 @@
 using System.Text;
+using Maple.API;
 using Maple.Application;
 using Maple.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,7 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors();
 
-const string supabaseJwtSecret = "dUk0UwQ+xdCeUBHkI9qP2sjsltqIJ+W8MVMJ/Vn7QC1THC/HX/p+9tOqaxMmSbBNgidGfPQ1H8JdzuhppIQ8zg==";
+const string supabaseJwtSecret =
+    "dUk0UwQ+xdCeUBHkI9qP2sjsltqIJ+W8MVMJ/Vn7QC1THC/HX/p+9tOqaxMmSbBNgidGfPQ1H8JdzuhppIQ8zg==";
 // Configure JWT authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -25,7 +27,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 
-builder.Services.AddApplication().AddInfrastructure();
+builder.Services.AddApplication().AddInfrastructure().AddPresentation();
 
 const string supabaseUrl = "https://timbkbpfurjfwtqnfrov.supabase.co";
 const string supabaseKey =
@@ -54,6 +56,7 @@ var supabaseClient = app.Services.GetRequiredService<SupabaseClient>();
 await supabaseClient.InitializeAsync();
 
 app.UseExceptionHandler("/error");
+
 
 app.UseAuthentication();
 app.UseAuthorization();

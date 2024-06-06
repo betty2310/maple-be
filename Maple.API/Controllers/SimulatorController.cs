@@ -1,6 +1,7 @@
 using Maple.Application.Simulator.Commands.Simulate;
 using Maple.Application.Simulator.Common;
 using Maple.Contracts.Simulator;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,26 +9,26 @@ namespace Maple.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class SimulatorController(ISender mediator) : ApiController
+public class SimulatorController : ApiController
 {
+    private readonly ISender _mediator;
+    private readonly IMapper _mapper;
+
+    public SimulatorController(ISender mediator, IMapper mapper)
+    {
+        _mediator = mediator;
+        _mapper = mapper;
+    }
+
     // POST api/<Simulator>
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] SimulationRequest simulation)
     {
-        var command = new SimulateCommand(simulation.Netlist, simulation.ExportNodes, simulation.Mode);
-        var response = await mediator.Send(command);
+        var command = _mapper.Map<SimulateCommand>(simulation);
+        var response = await _mediator.Send(command);
         return response.Match(
-            result => Ok(Map(result)),
+            result => Ok(_mapper.Map<List<SimulationResponse>>(result)),
             Problem
         );
-    }
-
-    private static List<SimulationResponse> Map(List<SimulateResult> result)
-    {
-        return result.Select(r => new SimulationResponse
-        {
-            Input = r.Input,
-            ExportNodes = r.ExportNodes,
-        }).ToList();
     }
 }

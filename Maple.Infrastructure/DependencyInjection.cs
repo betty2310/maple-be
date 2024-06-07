@@ -1,6 +1,6 @@
 using System.Text;
 using Maple.Application.Common.Interfaces;
-using Maple.Application.Common.Interfaces.Persistence;
+using Maple.Infrastructure.DbContext;
 using Maple.Infrastructure.Persistence;
 using Maple.Infrastructure.Simulator;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,6 +14,7 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddAuth();
+        services.AddSupabase();
         services.AddSingleton<ISimulatorRepository, SimulatorRepository>();
         services.AddScoped<IProjectRepository, ProjectRepository>();
         return services;
@@ -35,6 +36,16 @@ public static class DependencyInjection
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(supabaseJwtSecret))
                 };
             });
+        return services;
+    }
+
+    private static IServiceCollection AddSupabase(this IServiceCollection services)
+    {
+        const string supabaseUrl = "https://timbkbpfurjfwtqnfrov.supabase.co";
+        const string supabaseKey =
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpbWJrYnBmdXJqZnd0cW5mcm92Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU1MzQ5MzEsImV4cCI6MjAzMTExMDkzMX0.P_Nnd3zfLhwCdkYxNkMpMgdkRpAtjeTHp_berx1oBLI";
+
+        services.AddSingleton(new SupabaseClient(supabaseUrl, supabaseKey));
         return services;
     }
 }

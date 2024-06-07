@@ -5,6 +5,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
     <PackageReference Include="SpiceSharp" Version="3.1.9" />
     <PackageReference Include="SpiceSharp-Parser" Version="3.1.5" />
   </ItemGroup>

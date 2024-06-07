@@ -1,16 +1,16 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Maple.API;
+namespace Maple.API.Controllers;
 
 [Route("api/[controller]")]
 [Authorize]
 [ApiController]
-public class Projects : ControllerBase
+public class ProjectsController : ControllerBase
 {
     private readonly SupabaseClient _supabaseClient;
 
-    public Projects(SupabaseClient supabaseClient)
+    public ProjectsController(SupabaseClient supabaseClient)
     {
         _supabaseClient = supabaseClient;
     }

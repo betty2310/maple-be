@@ -1,0 +1,3 @@
+GET {{host}}/api/Projects
+Content-Type: application/json
+Authorization: Bearer {{token}}

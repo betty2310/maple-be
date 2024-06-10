@@ -9,15 +9,15 @@
 
     <ItemGroup>
         <PackageReference Include="DotNetEnv" Version="3.0.0" />
+        <PackageReference Include="Mapster" Version="7.4.1-pre01" />
+        <PackageReference Include="Mapster.DependencyInjection" Version="1.0.2-pre01" />
         <PackageReference Include="Microsoft.AspNet.WebApi.Cors" Version="5.3.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.6" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.2" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
         <PackageReference Include="SpiceSharp" Version="3.1.9" />
         <PackageReference Include="SpiceSharp-Parser" Version="3.1.5" />
-        <PackageReference Include="supabase" Version="1.0.3" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
 

@@ -20,16 +20,15 @@ public class ApiController : ControllerBase
 
     private ObjectResult Problem(Error error)
     {
-        var statusCode = error.Type switch
+        var code = error.Code switch
         {
-            ErrorType.Conflict => StatusCodes.Status409Conflict,
-            ErrorType.Validation => StatusCodes.Status400BadRequest,
-            ErrorType.NotFound => StatusCodes.Status404NotFound,
-            ErrorType.Unauthorized => StatusCodes.Status403Forbidden,
-            _ => StatusCodes.Status500InternalServerError,
+            "NoExportNodesProvided" => 501,
+            "MustHaveVoltageSource" => 502,
+            "UnknownError" => 503,
+            _ => 500,
         };
 
-        return Problem(statusCode: statusCode, title: error.Description);
+        return Problem(statusCode: code, title: error.Description);
     }
 
     private ActionResult ValidationProblem(List<Error> errors)

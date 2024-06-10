@@ -1,0 +1,12 @@
+GET {{host}}/api/Projects
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+POST {{host}}/api/Projects
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Project 2"
+}

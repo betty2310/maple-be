@@ -1,16 +1,19 @@
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
-namespace Maple.API.Models;
+namespace Maple.Infrastructure.DbContext;
 
 [Table("projects")]
-public class Projects : BaseModel
+public class ProjectModelContext : BaseModel
 {
     [PrimaryKey("id")]
     public int Id { get; set; }
 
     [Column("name")]
     public string Name { get; set; }
+    
+    [Column("content")]
+    public string Content { get; set; }
     
     [Column("created_at")]
     public DateTime CreatedAt { get; set; }

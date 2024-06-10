@@ -9,26 +9,29 @@ namespace Maple.Application.Simulator.Commands.Simulate;
 public class SimulateCommandHandler : IRequestHandler<SimulateCommand, ErrorOr<List<SimulateResult>>>
 {
     private readonly ISimulatorRepository _simulatorRepository;
-    
+
     public SimulateCommandHandler(ISimulatorRepository simulatorRepository)
     {
         _simulatorRepository = simulatorRepository;
     }
-    
-    public async Task<ErrorOr<List<SimulateResult>>> Handle(SimulateCommand command, CancellationToken cancellationToken)
+
+    public async Task<ErrorOr<List<SimulateResult>>> Handle(SimulateCommand command,
+        CancellationToken cancellationToken)
     {
+        await Task.CompletedTask;
         if (command.ExportNodes.Count == 0)
         {
             return Errors.Simulator.NoExportNodesProvided;
         }
-        try 
+
+        try
         {
             var result = _simulatorRepository.Run(command.Netlist, command.ExportNodes, command.Mode);
             return result;
         }
-        catch (InvalidOperationException e)
+        catch (Exception e)
         {
-            return Errors.Simulator.MustHaveVoltageSource;
+            return e is InvalidOperationException ? Errors.Simulator.MustHaveVoltageSource : Errors.Simulator.UnknownError;
         }
     }
 }

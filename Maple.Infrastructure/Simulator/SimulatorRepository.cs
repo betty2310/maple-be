@@ -106,7 +106,7 @@ public class SimulatorRepository : ISimulatorRepository
                 response = _analyzeAC(ac, circuit, exportsAc);
                 break;
             default:
-                break;
+                throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
         }
 
 
@@ -209,6 +209,14 @@ public class SimulatorRepository : ISimulatorRepository
                 var actual = exportsIt.Current?.Value ?? throw new ArgumentNullException();
                 var exportNodeKey = $"exportNodes[{index}]";
                 var decibels = 10.0 * Math.Log10(actual.Real * actual.Real + actual.Imaginary * actual.Imaginary);
+                Console.WriteLine($"ExportNode: {exportNodeKey}, Value: {decibels}");
+                if (double.IsNaN(decibels) || double.IsNegativeInfinity(decibels))
+                {
+                    decibels = 0;
+                } else if (double.IsPositiveInfinity(decibels))
+                {
+                    decibels = 1000;
+                }
                 response.ExportNodes[exportNodeKey] = decibels;
                 index++;
             }

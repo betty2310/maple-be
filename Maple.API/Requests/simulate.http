@@ -1,6 +1,5 @@
 ### Post mach chinh luu nua chu ky
-@url = http://localhost:5109
-POST {{url}}/api/Simulator
+POST {{host}}/api/Simulator
 Content-Type: application/json
 
 {
@@ -16,7 +15,7 @@ Content-Type: application/json
 }
 
 ### Post mach simple
-POST {{url}}/api/Simulator
+POST {{host}}/api/Simulator
 Content-Type: application/json
 
 {
@@ -40,7 +39,7 @@ Content-Type: application/json
 }
 
 ### Post test case no export node
-POST {{url}}/api/Simulator
+POST {{host}}/api/Simulator
 Content-Type: application/json
 
 {
@@ -52,7 +51,7 @@ Content-Type: application/json
 }
 
 ### Post mach co transistor
-POST {{url}}/api/Simulator
+POST {{host}}/api/Simulator
 Content-Type: application/json
 
 {
@@ -69,7 +68,7 @@ Content-Type: application/json
 
 
 ### Post mach co diode
-POST {{url}}/api/Simulator
+POST {{host}}/api/Simulator
 Content-Type: application/json
 
 {
@@ -90,7 +89,7 @@ Content-Type: application/json
 
 
 ### Post khong co AC simulator
-POST {{url}}/api/Simulator
+POST {{host}}/api/Simulator
 Content-Type: application/json
 
 {

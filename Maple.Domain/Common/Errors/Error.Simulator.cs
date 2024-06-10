@@ -11,5 +11,8 @@ public static partial class Errors
         
         public static Error MustHaveVoltageSource =>
             Error.Failure(code: "MustHaveVoltageSource", description: "The circuit must have a voltage source");
+
+        public static Error UnknownError =>
+            Error.Failure(code: "UnknownError", description: "Unknown error occurred while simulating the circuit");
     }
 }

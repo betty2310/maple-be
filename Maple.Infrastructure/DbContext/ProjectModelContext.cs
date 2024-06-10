@@ -1,4 +1,3 @@
-using System.Text.Json.Nodes;
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
@@ -14,7 +13,7 @@ public class ProjectModelContext : BaseModel
     public string Name { get; set; }
     
     [Column("content")]
-    public JsonNode Content { get; set; }
+    public string Content { get; set; }
     
     [Column("created_at")]
     public DateTime CreatedAt { get; set; }

@@ -1,5 +1,4 @@
 using Maple.Application.Simulator.Commands.Simulate;
-using Maple.Application.Simulator.Common;
 using Maple.Contracts.Simulator;
 using MapsterMapper;
 using MediatR;

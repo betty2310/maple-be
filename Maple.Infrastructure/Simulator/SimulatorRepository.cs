@@ -2,6 +2,7 @@ using System.Numerics;
 using Maple.Application.Common.Interfaces;
 using Maple.Application.Simulator.Common;
 using Maple.Domain.Common;
+using Maple.Domain.Entities.SimulatorMode;
 using Maple.Infrastructure.Common;
 using Maple.Infrastructure.Common.DiodeModels;
 using SpiceSharp;
@@ -15,7 +16,8 @@ namespace Maple.Infrastructure.Simulator;
 
 public class SimulatorRepository : ISimulatorRepository
 {
-    public List<SimulateResult> Run(string netlist, List<ExportNode> exportNodes, SimulatorMode mode)
+    public List<SimulateResult> Run(string netlist, List<ExportNode> exportNodes, SimulatorMode mode,
+        Arguments arguments)
     {
         var netlistStr = netlist.Replace("\\n", "\n");
 
@@ -69,7 +71,8 @@ public class SimulatorRepository : ISimulatorRepository
         {
             case SimulatorMode.DCSweep:
                 var sweeps = enumerable
-                    .Select(a => new ParameterSweep(a.Name, new LinearSweep(0, 3, 0.1)))
+                    .Select(a => new ParameterSweep(a.Name,
+                        new LinearSweep(arguments.DcSweep.Initial, arguments.DcSweep.Final, arguments.DcSweep.Delta)))
                     .ToList();
 
                 var dc = new DC("dc 1", sweeps);
@@ -83,10 +86,7 @@ public class SimulatorRepository : ISimulatorRepository
                 response = _analyzeDC(dc, circuit, exports);
                 break;
             case SimulatorMode.Transient:
-                const double step = 1e-3;
-                const double final = 0.1;
-                var tran = new Transient("Tran 1", step, final);
-
+                var tran = new Transient("Tran 1", arguments.Transient.Step, arguments.Transient.Final);
 
                 var exportsTransient = exportNodes.Select<ExportNode, IExport<double>>(node =>
                     node.Type == ExportType.I
@@ -97,7 +97,9 @@ public class SimulatorRepository : ISimulatorRepository
                 response = _analyzeTransient(tran, circuit, exportsTransient);
                 break;
             case SimulatorMode.ACSweep:
-                var ac = new AC("AC 1", new DecadeSweep(1e-2, 1.0e3, 5));
+                var ac = new AC("AC 1",
+                    new DecadeSweep(arguments.AcSweep.Initial, arguments.AcSweep.Final,
+                        arguments.AcSweep.PointsPerDecade));
                 var exportsAc = exportNodes.Select<ExportNode, IExport<Complex>>(node =>
                     node.Type == ExportType.I
                         ? new ComplexPropertyExport(ac, node.node, "i")
@@ -213,10 +215,12 @@ public class SimulatorRepository : ISimulatorRepository
                 if (double.IsNaN(decibels) || double.IsNegativeInfinity(decibels))
                 {
                     decibels = 0;
-                } else if (double.IsPositiveInfinity(decibels))
+                }
+                else if (double.IsPositiveInfinity(decibels))
                 {
                     decibels = 1000;
                 }
+
                 response.ExportNodes[exportNodeKey] = decibels;
                 index++;
             }

@@ -11,7 +11,23 @@ Content-Type: application/json
       "node": "2"
     }
   ],
-  "mode": 0
+  "mode": 0,
+  "arguments": {
+    "acSweep": {
+      "initial": 0.001,
+      "final": 1000,
+      "pointsPerDecade": 5
+    },
+    "dcSweep": {
+      "initial": 0,
+      "final": 3,
+      "delta": 0.1
+    },
+    "transient": {
+      "step": 1e-3,
+      "final": 0.1
+    }
+  }
 }
 
 ### Post mach simple
@@ -35,7 +51,23 @@ Content-Type: application/json
       "node": "R1"
     }
   ],
-  "mode": 1
+  "mode": 1,
+  "arguments": {
+    "acSweep": {
+      "initial": 0.001,
+      "final": 1000,
+      "pointsPerDecade": 5
+    },
+    "dcSweep": {
+      "initial": 0,
+      "final": 3,
+      "delta": 0.1
+    },
+    "transient": {
+      "step": 1e-3,
+      "final": 0.1
+    }
+  }
 }
 
 ### Post test case no export node
@@ -107,3 +139,4 @@ Content-Type: application/json
   ],
   "mode": 2
 }
+

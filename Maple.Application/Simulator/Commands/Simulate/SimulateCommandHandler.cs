@@ -26,7 +26,7 @@ public class SimulateCommandHandler : IRequestHandler<SimulateCommand, ErrorOr<L
 
         try
         {
-            var result = _simulatorRepository.Run(command.Netlist, command.ExportNodes, command.Mode);
+            var result = _simulatorRepository.Run(command.Netlist, command.ExportNodes, command.Mode, command.Arguments);
             return result;
         }
         catch (Exception e)
